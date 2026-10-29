@@ -1,0 +1,20 @@
+{
+  "name": "toonify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI 캐리커처 생성 웹 앱 (Express + OpenAI 이미지 편집 API)",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server/local.js",
+    "start": "node server/local.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "multer": "^2.5.0",
+    "openai": "^7.45.1"
+  }
+}

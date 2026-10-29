@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toonify · AI 캐리커처 생성기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="logo" href="#">
+        <span class="logo__mark">✦</span> Toonify
+      </a>
+      <span class="badge" id="modeBadge">연결 확인 중…</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>사진 한 장으로 만드는<br /><span class="accent">나만의 AI 캐리커처</span></h1>
+      <p>사진을 올리고 스타일을 고른 뒤 변환 버튼만 누르세요.</p>
+    </section>
+
+    <!-- STEP 1. 업로드 -->
+    <section class="card" aria-labelledby="step1">
+      <h2 class="card__title" id="step1"><span class="step">1</span> 사진 업로드</h2>
+
+      <label class="dropzone" id="dropzone" for="fileInput">
+        <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" hidden />
+        <div class="dropzone__empty" id="dropzoneEmpty">
+          <div class="dropzone__icon">📷</div>
+          <p><strong>클릭</strong>하거나 사진을 <strong>끌어다 놓으세요</strong></p>
+          <p class="muted">PNG · JPG · WEBP, 최대 <span id="maxSizeText">10</span>MB</p>
+        </div>
+        <div class="dropzone__preview" id="dropzonePreview" hidden>
+          <img id="previewImg" alt="업로드한 원본 사진 미리보기" />
+          <div class="dropzone__meta">
+            <span id="fileName"></span>
+            <button type="button" class="btn btn--ghost btn--sm" id="removeBtn">다른 사진 선택</button>
+          </div>
+        </div>
+      </label>
+    </section>
+
+    <!-- STEP 2. 스타일 선택 -->
+    <section class="card" aria-labelledby="step2">
+      <h2 class="card__title" id="step2"><span class="step">2</span> 스타일 선택</h2>
+      <div class="styles" id="styleList" role="radiogroup" aria-label="변환 스타일">
+        <!-- app.js 에서 STYLES 설정으로 렌더링 -->
+      </div>
+
+      <details class="extra">
+        <summary>추가 요청사항 (선택)</summary>
+        <textarea id="extraPrompt" rows="2" maxlength="300"
+          placeholder="예) 배경은 바닷가로, 웃는 표정을 더 과장해 주세요"></textarea>
+      </details>
+    </section>
+
+    <!-- STEP 3. 변환 -->
+    <section class="action">
+      <button type="button" class="btn btn--primary btn--lg" id="convertBtn" disabled>
+        <span class="btn__label">✨ 이미지 변환하기</span>
+        <span class="spinner" aria-hidden="true"></span>
+      </button>
+      <p class="muted" id="statusText">사진을 업로드하고 스타일을 선택해 주세요.</p>
+    </section>
+
+    <!-- STEP 4. 결과 비교 -->
+    <section class="card" id="resultSection" aria-labelledby="step4" hidden>
+      <div class="result__head">
+        <h2 class="card__title" id="step4"><span class="step">3</span> 결과 비교</h2>
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab is-active" data-view="slider" role="tab" aria-selected="true">슬라이더</button>
+          <button type="button" class="tab" data-view="side" role="tab" aria-selected="false">나란히 보기</button>
+        </div>
+      </div>
+
+      <!-- 슬라이더 비교 -->
+      <div class="compare" id="compareSlider">
+        <img class="compare__img" id="compareAfter" alt="변환된 이미지" />
+        <div class="compare__before" id="compareBeforeWrap">
+          <img class="compare__img" id="compareBefore" alt="원본 이미지" />
+        </div>
+        <div class="compare__handle" id="compareHandle"><span>⇆</span></div>
+        <span class="compare__label compare__label--left">원본</span>
+        <span class="compare__label compare__label--right">변환</span>
+        <input type="range" class="compare__range" id="compareRange" min="0" max="100" value="50"
+          aria-label="원본/변환 이미지 비교 위치" />
+      </div>
+
+      <!-- 나란히 보기 -->
+      <div class="side" id="compareSide" hidden>
+        <figure>
+          <img id="sideBefore" alt="원본 이미지" />
+          <figcaption>원본</figcaption>
+        </figure>
+        <figure>
+          <img id="sideAfter" alt="변환된 이미지" />
+          <figcaption id="sideAfterCaption">변환</figcaption>
+        </figure>
+      </div>
+
+      <div class="result__actions">
+        <button type="button" class="btn btn--ghost" id="retryBtn">🔄 다시 변환</button>
+        <a class="btn btn--primary" id="downloadBtn" download>⬇️ 이미지 다운로드</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container muted">© 2026 Toonify · Frontend demo</div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/mock.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
